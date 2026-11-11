@@ -1,0 +1,17 @@
+Symbol	Address	Type
+
+Program: Add.asm
+END	6	LABEL
+
+Program: Max.asm
+X_IS_GREATER	12	LABEL
+END	16	LABEL
+
+Program: Rect.asm
+LOOP	8	LABEL
+END	25	LABEL
+addr	16	VARIABLE
+n	17	VARIABLE
+
+Program: Pong.asm
+LOOP	0	LABEL

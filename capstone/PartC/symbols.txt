@@ -1,0 +1,7 @@
+Symbol	Address	Type
+
+Program: Box.asm
+LOOP	0	LABEL
+CLEAR_ROW	12	LABEL
+DRAW	37	LABEL
+DRAW_ROW	45	LABEL
