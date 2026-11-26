@@ -1,4 +1,3 @@
-
 // Draws a rectangle of width 16 pixels.
 // Height is stored in RAM[0].
 

@@ -66,6 +66,24 @@ def read_file(filename):
     return instructions
 
 
+def read_file_with_lines(filename):
+
+    instructions = []
+    line_numbers = []
+
+    with open(filename, "r") as file:
+
+        for line_number, line in enumerate(file, start=1):
+            line = line.split("//")[0].strip()
+            line = "".join(line.split())
+
+            if line:
+                instructions.append(line)
+                line_numbers.append(line_number)
+
+    return instructions, line_numbers
+
+
 # 4. First pass: Find labels
 def first_pass(instructions):
 
@@ -126,14 +144,14 @@ def convert_c_instruction(line):
 
 
 # 6. Second pass: Generate machine code
-def second_pass(instructions, symbols):
+def second_pass(instructions, symbols, line_numbers=None):
 
     machine_code = []
     variables = {}
 
     next_address = 16
 
-    for line in instructions:
+    for index, line in enumerate(instructions):
 
         # Skip labels
         if line.startswith("(") and line.endswith(")"):
@@ -175,7 +193,14 @@ def second_pass(instructions, symbols):
         # C-instruction
         else:
 
-            binary = convert_c_instruction(line)
+            try:
+                binary = convert_c_instruction(line)
+            except ValueError as error:
+                if line_numbers:
+                    raise ValueError(
+                        "Line " + str(line_numbers[index]) + ": " + str(error)
+                    ) from error
+                raise
             machine_code.append(binary)
 
     return machine_code, variables
@@ -201,6 +226,34 @@ def save_symbols(all_symbols, filename):
                 file.write(
                     name + "\t" + str(address) + "\tVARIABLE\n"
                 )
+
+
+def assemble(source, output=None, symbols_file=None):
+    source = Path(source)
+    instructions, line_numbers = read_file_with_lines(source)
+
+    symbols, labels = first_pass(instructions)
+    machine_code, variables = second_pass(
+        instructions, symbols, line_numbers
+    )
+
+    if output is None:
+        output = source.with_suffix(".hack")
+    else:
+        output = Path(output)
+    output.write_text(
+        "\n".join(machine_code) + ("\n" if machine_code else ""),
+        encoding="utf-8"
+    )
+
+    if symbols_file is not None:
+        symbols_file = Path(symbols_file)
+        save_symbols(
+            [(source.name, labels, variables)],
+            symbols_file
+        )
+
+    return len(machine_code), labels, variables
 
 
 # 8. Main assembler function

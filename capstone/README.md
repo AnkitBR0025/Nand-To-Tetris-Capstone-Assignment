@@ -1,74 +1,50 @@
 # Nand2Tetris Capstone – Make the Computer Draw a Box
 
-## Student Details
+This folder contains the HDL, assembler and Hack assembly files for my capstone project.
+
+## Student details
 
 - **Name:** Ankit Kumar Pandey
-- **Roll Number:** 2501350030
+- **University roll number:** 2501350030
 - **K:** 30
-- **Course:** ETCCNT301
-- **Project:** Make the Computer Draw a Box
+- **Course:** ETCCNT301 – Nand to Tetris I
 
-## Project Overview
+## What the project does
 
-This capstone project focuses on understanding computer architecture and the internal working of a computer using the Nand2Tetris platform.
+The capstone is divided into three parts:
 
-The project is divided into three parts:
+1. **Part A – HDL implementation:** builds logic and sequential hardware components and combines the CPU, memory and computer.
+2. **Part B – Hack assembler:** uses Python to translate Hack assembly instructions into 16-bit machine code and records labels and variables in a symbol table.
+3. **Part C – Box program:** draws a box on the Hack screen while a key is pressed and clears it after the key is released.
 
-- **Part A – HDL Implementation:** Implementation and testing of CPU, Memory, and Computer chips.
-- **Part B – Hack Assembler:** Development of a Python-based two-pass assembler to translate Hack assembly instructions into machine code.
-- **Part C – Box Program:** Development of a Hack Assembly program that draws and clears a rectangular box using keyboard input and screen memory.
+## Box calculation
 
-## Box Specifications
+Using `K = 30`:
 
-The box dimensions are calculated using my university roll number.
+- Starting row = `30`
+- Height = `20` rows
+- Width = `16 × ((30 mod 4) + 1) = 48` pixels
+- Words per row = `48 / 16 = 3`
+- Starting screen address = `16384 + (32 × 30) = 17344`
 
-- K = 30
-- Starting row = 30
-- Height = 20 rows
-- Width = 16 × ((K mod 4) + 1) = 48 pixels
-- Number of screen words per row = 3
+The program writes three consecutive screen words on each row. It then adds 29 more words to the pointer, so the next row begins 32 words after the previous row's starting address.
 
-Starting screen memory address:
-
-`SCREEN + (32 × 30) = 16384 + 960 = 17344`
-
-The program draws the box when a keyboard key is pressed and clears it when no key is pressed.
-
-## Project Structure
+## Folder structure
 
 ```text
 capstone/
-│
 ├── README.md
-│
+├── assembler.py
 ├── PartA/
-│   ├── CPU.hdl
-│   ├── Memory.hdl
-│   ├── Computer.hdl
-│   ├── CPU.tst
-│   ├── CPU.cmp
-│   ├── Memory.tst
-│   ├── Memory.cmp
-│   ├── ComputerAdd.tst
-│   ├── ComputerAdd.cmp
-│   ├── ComputerMax.tst
-│   ├── ComputerMax.cmp
-│   ├── ComputerRect.tst
-│   └── ComputerRect.cmp
-│
+│   ├── PartA1/   # Logic gates, ALU, register, RAM and PC
+│   └── PartA2/   # CPU, Memory, Computer and test files
 ├── PartB/
 │   ├── assembler.py
-│   ├── Add.asm
-│   ├── Add.hack
-│   ├── Max.asm
-│   ├── Max.hack
-│   ├── Rect.asm
-│   ├── Rect.hack
-│   ├── Pong.asm
-│   ├── Pong.hack
-│   ├── symbols.txt
-│   └── README.md
-│
+│   ├── Add.asm / Add.hack
+│   ├── Max.asm / Max.hack
+│   ├── Rect.asm / Rect.hack
+│   ├── Pong.asm / Pong.hack
+│   └── symbols.txt
 └── PartC/
     ├── assembler.py
     ├── Box.asm
@@ -78,65 +54,34 @@ capstone/
 
 ## Requirements
 
-- Python 3.8 or newer
-- Nand2Tetris Software Suite
-- VS Code (recommended)
-- Windows PowerShell
+- Python 3.8+
+- Nand2Tetris Hardware Simulator and CPU Emulator
+- No external Python packages
 
-No third-party Python packages are required for the assembler.
+## Run instructions
 
-## Running the Project
+**Part A:** Open the Hardware Simulator, load the HDL files and run the available `.tst` files from `PartA/PartA2/`. Compare the result with the matching `.cmp` file.
 
-### Part A – HDL Testing
-
-1. Open the Nand2Tetris Hardware Simulator.
-2. Load the required HDL files from `PartA/`.
-3. Run the corresponding `.tst` test files.
-4. Verify the results against the provided `.cmp` files.
-
-### Part B – Hack Assembler
-
-Open PowerShell inside the `PartB` folder and execute:
+**Part B:** Open a terminal in `PartB/` and run:
 
 ```powershell
 python assembler.py Add.asm Max.asm Rect.asm Pong.asm
 ```
 
-The assembler generates the corresponding `.hack` files and saves the user-defined labels and variables in `symbols.txt`.
-
-Refer to `PartB/README.md` for more details.
-
-### Part C – Box Program
-
-Open PowerShell inside the `PartC` folder and execute:
+**Part C:** Open a terminal in `PartC/` and run:
 
 ```powershell
 python assembler.py Box.asm
 ```
 
-Load the generated `Box.hack` file into the Nand2Tetris CPU Emulator.
+Load `Box.hack` into the CPU Emulator. Start the program, press a key to draw the box, and release the key to clear it.
 
-1. Start the program.
-2. Press and hold a key in the emulator's keyboard panel.
-3. Observe the rectangular box appearing on the screen.
-4. Release the key and observe the box being cleared.
+## Testing evidence
 
-## Testing and Evidence
+The repository-level Python tests can be run from the project root:
 
-Screenshots of the implementation and testing are maintained separately in the project report folder:
-
-```text
-report/
-└── screenshots/
-    ├── PartA/
-    ├── PartB/
-    └── PartC/
+```powershell
+python -m unittest discover -s tests -v
 ```
 
-## Submission
-
-The `capstone/` folder contains the HDL source files, Python assembler, Hack assembly programs, generated machine-code files, and symbol tables.
-
-The short capstone report and actual test screenshots are submitted through ZOSIMA as required by the assignment.
-
-**Declaration:** I will verify and explain my submitted implementation during the viva.
+Screenshots and the full project explanation are in the sibling `report/` folder. See the repository-root `README.md` for the complete project guide.

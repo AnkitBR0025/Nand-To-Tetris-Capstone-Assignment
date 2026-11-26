@@ -2,123 +2,73 @@
 
 ## Overview
 
-In Part B, I developed a Python-based two-pass Hack Assembler that translates Hack Assembly Language instructions into 16-bit binary machine code.
+For Part B, I implemented a Python-based **two-pass Hack assembler**. It reads Hack assembly (`.asm`) files and converts each instruction into a 16-bit binary machine instruction (`.hack`). The program can assemble more than one input file in a single run.
 
-The assembler supports:
+## Features
 
-- A-instructions and C-instructions.
-- Predefined Hack symbols.
-- User-defined labels.
-- Automatic variable allocation starting from RAM address 16.
-- Symbol table generation.
-- Assembly of multiple `.asm` files in one execution.
+- Handles A-instructions and C-instructions.
+- Removes comments, blank lines and unnecessary whitespace before processing.
+- Recognises predefined symbols such as `SP`, `LCL`, `R0`–`R15`, `SCREEN` and `KBD`.
+- Finds user-defined labels and stores their ROM addresses.
+- Allocates new variables starting at RAM address 16.
+- Writes a symbol table with the symbol name, address and type (`LABEL` or `VARIABLE`).
+- Checks invalid destinations, computations, jumps and symbol formats.
 
-## Project Files
+## Files
 
-```text
-PartB/
-├── assembler.py
-├── Add.asm
-├── Add.hack
-├── Max.asm
-├── Max.hack
-├── Rect.asm
-├── Rect.hack
-├── Pong.asm
-├── Pong.hack
-├── symbols.txt
-└── README.md
-```
+- `assembler.py` – assembler implementation.
+- `Add.asm`, `Max.asm`, `Rect.asm`, `Pong.asm` – input assembly programs.
+- `Add.hack`, `Max.hack`, `Rect.hack`, `Pong.hack` – generated machine-code files.
+- `symbols.txt` – labels and variables found during assembly.
 
 ## Requirements
 
 - Python 3.8 or newer
-- Nand2Tetris CPU Emulator
-- VS Code or any Python-compatible editor
+- Nand2Tetris CPU Emulator for running the generated programs
+- No third-party Python packages
 
-No third-party Python packages are required.
+## Run the assembler
 
-## How to Run
-
-Open PowerShell inside the `PartB` directory.
-
-Check Python:
-
-```powershell
-python --version
-```
-
-Run the assembler:
+Open PowerShell or a terminal in this `PartB` folder and run:
 
 ```powershell
 python assembler.py Add.asm Max.asm Rect.asm Pong.asm
 ```
 
-The assembler processes all four programs and generates:
+The generated `.hack` files and `symbols.txt` are saved in the same folder. To assemble only one program, provide just its filename, for example:
 
-- `Add.hack`
-- `Max.hack`
-- `Rect.hack`
-- `Pong.hack`
-- `symbols.txt`
-
-The generated `.hack` files are saved directly in the `PartB` directory.
-
-## Assembler Working
-
-The assembler uses two passes.
-
-### Pass 1 – Label Processing
-
-- Reads the assembly program.
-- Removes comments and blank lines.
-- Identifies labels.
-- Stores label names with their ROM addresses.
-
-### Pass 2 – Machine Code Generation
-
-- Converts A-instructions into 16-bit binary.
-- Converts C-instructions using the destination, computation, and jump tables.
-- Allocates variables starting from RAM address 16.
-- Generates the final `.hack` file.
-
-## Symbol Table – Personalized Feature
-
-My university roll number is 2501350030.
-
-Therefore:
-
-`K = 30`
-
-`K mod 3 = 0`
-
-For the personalized requirement, the assembler saves user-defined labels and allocated variables with their addresses and types in `symbols.txt`.
-
-The symbol table contains separate sections for each assembled program.
-
-## Testing
-
-The generated machine-code files were loaded into the Nand2Tetris CPU Emulator.
-
-- **Add.asm:** Tests addition and stores the result in RAM[0].
-- **Max.asm:** Compares two values and stores the maximum in RAM[2].
-- **Rect.asm:** Tests rectangular screen drawing.
-- **Pong.asm:** Tests the supplied compact Pong-style screen-write program.
-
-**Note:** The included `Pong.asm` is a compact demonstration program, not the complete official Nand2Tetris Pong game.
-
-## Expected Output
-
-A successful assembly displays messages similar to:
-
-```text
-Successfully assembled: Add.asm
-Successfully assembled: Max.asm
-Successfully assembled: Rect.asm
-Successfully assembled: Pong.asm
-
-Symbol table saved successfully!
-All files assembled successfully!
+```powershell
+python assembler.py Add.asm
 ```
 
-The exact instruction counts depend on the source files.
+## How the two passes work
+
+### Pass 1 – label collection
+
+1. Read each line and remove comments and whitespace.
+2. Ignore empty lines.
+3. Find label declarations such as `(LOOP)`.
+4. Store each label with the ROM address of the next instruction. Labels do not take up a ROM instruction address.
+
+### Pass 2 – machine-code generation
+
+1. Skip label declarations.
+2. Convert an A-instruction (`@value`) to a 16-bit binary value. A numeric value is converted directly; a known symbol is replaced with its address.
+3. Allocate an address to a new variable, beginning at RAM address 16.
+4. Convert a C-instruction using the computation, destination and jump lookup tables.
+5. Write the generated binary instructions to the `.hack` output file.
+
+## Personalised symbol table
+
+My university roll number is `2501350030`, so `K = 30` and `K mod 3 = 0`. The assembler writes the labels and variables found in each input program to `symbols.txt`, grouped by program. The table records the symbol, its address and whether it is a label or a variable.
+
+## Testing the output
+
+Load each generated `.hack` file into the Nand2Tetris CPU Emulator and run it:
+
+- **Add.asm** – adds the values used by the supplied program and stores the result in RAM.
+- **Max.asm** – compares the supplied values and stores the larger value.
+- **Rect.asm** – runs the supplied rectangle screen program.
+- **Pong.asm** – runs a compact screen-write demonstration. It is not the complete official Nand2Tetris Pong game.
+
+The project screenshots in `report/screenshots/PartB/` show assembler execution, emulator runs and the generated symbol table.
