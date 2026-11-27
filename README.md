@@ -108,11 +108,8 @@ The assembler reads the instructions again and converts them into 16-bit binary 
 
 ![Rect CPU Emulator](report/screenshots/PartB/04_Rect_CPU_Emulator.png)
 
-**5. Pong Demonstration in CPU Emulator**
 
-![Pong CPU Emulator](report/screenshots/PartB/05_Pong_CPU_Emulator.png)
-
-**6. Generated Symbol Table**
+**5. Generated Symbol Table**
 
 ![Assembler Symbol Table](report/screenshots/PartB/06_Symbol_Table.png)
 
@@ -208,11 +205,9 @@ Nand2Tetris-Capstone/
 │   │   ├── Add.asm
 │   │   ├── Max.asm
 │   │   ├── Rect.asm
-│   │   ├── Pong.asm
 │   │   ├── Add.hack
 │   │   ├── Max.hack
 │   │   ├── Rect.hack
-│   │   ├── Pong.hack
 │   │   └── symbols.txt
 │   │
 │   └── PartC/
@@ -240,7 +235,6 @@ Nand2Tetris-Capstone/
         │   ├── 02_Add_CPU_Emulator.png
         │   ├── 03_Max_CPU_Emulator.png
         │   ├── 04_Rect_CPU_Emulator.png
-        │   ├── 05_Pong_CPU_Emulator.png
         │   └── 06_Symbol_Table.png
         │
         └── PartC/

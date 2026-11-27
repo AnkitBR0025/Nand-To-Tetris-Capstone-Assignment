@@ -1,4 +1,3 @@
-// Capstone Box program for roll number 2501350030 (K = 30)
 // Box: rows 30 through 49; 20 rows tall; 48 pixels wide (3 words).
 // A key press draws the box; releasing all keys clears it.
 

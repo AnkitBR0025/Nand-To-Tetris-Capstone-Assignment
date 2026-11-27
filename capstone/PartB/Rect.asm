@@ -1,6 +1,3 @@
-// Draws a rectangle of width 16 pixels.
-// Height is stored in RAM[0].
-
 @SCREEN
 D=A
 @addr
@@ -21,8 +18,6 @@ D;JEQ
 A=M
 M=-1
 
-// Move to the same column in the next screen row.
-// Each screen row contains 32 words.
 @addr
 D=M
 @32

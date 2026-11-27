@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 
 
-# 1. Predefined symbols
+
 SYMBOLS = {
     "SP": 0, "LCL": 1, "ARG": 2,
     "THIS": 3, "THAT": 4,
@@ -14,7 +14,6 @@ for i in range(16):
     SYMBOLS["R" + str(i)] = i
 
 
-# 2. Machine code tables
 DEST = {
     "": "000", "M": "001", "D": "010",
     "MD": "011", "A": "100", "AM": "101",
@@ -44,8 +43,6 @@ COMP = {
     "D|A": "0010101", "D|M": "1010101"
 }
 
-
-# 3. Read and clean assembly file
 def read_file(filename):
 
     instructions = []
@@ -66,7 +63,6 @@ def read_file(filename):
     return instructions
 
 
-# 4. First pass: Find labels
 def first_pass(instructions):
 
     symbols = SYMBOLS.copy()
@@ -95,7 +91,6 @@ def first_pass(instructions):
     return symbols, labels
 
 
-# 5. Convert C-instruction
 def convert_c_instruction(line):
 
     if line.count("=") > 1 or line.count(";") > 1:
@@ -125,7 +120,6 @@ def convert_c_instruction(line):
     return "111" + COMP[comp] + DEST[dest] + JUMP[jump]
 
 
-# 6. Second pass: Generate machine code
 def second_pass(instructions, symbols):
 
     machine_code = []
@@ -181,7 +175,7 @@ def second_pass(instructions, symbols):
     return machine_code, variables
 
 
-# 7. Save symbol table
+
 def save_symbols(all_symbols, filename):
 
     with open(filename, "w") as file:
@@ -203,7 +197,7 @@ def save_symbols(all_symbols, filename):
                 )
 
 
-# 8. Main assembler function
+
 def main():
 
     parser = argparse.ArgumentParser(
@@ -257,8 +251,7 @@ def main():
             print("Error:", error)
             return
 
-    # Roll number 30: 30 mod 3 = 0
-    # Save labels and variables
+
     save_symbols(
         all_symbols,
         folder / "symbols.txt"
@@ -268,6 +261,5 @@ def main():
     print("All files assembled successfully!")
 
 
-# 9. Program execution starts here
 if __name__ == "__main__":
     main()

@@ -18,7 +18,7 @@ For Part B, I implemented a Python-based **two-pass Hack assembler**. It reads H
 
 - `assembler.py` – assembler implementation.
 - `Add.asm`, `Max.asm`, `Rect.asm`, `Pong.asm` – input assembly programs.
-- `Add.hack`, `Max.hack`, `Rect.hack`, `Pong.hack` – generated machine-code files.
+- `Add.hack`, `Max.hack`, `Rect.hack` – generated machine-code files.
 - `symbols.txt` – labels and variables found during assembly.
 
 ## Requirements
